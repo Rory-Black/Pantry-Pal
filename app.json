@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "pantry-pal",
     "name": "pantry-pal",
     "slug": "pantry-pal",
     "version": "1.0.0",
@@ -24,6 +25,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
