@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { sharedStyles } from '../styles/sharedStyles';
 
 export default function HomeScreen() {
+  
   const router = useRouter();
 
   // Placeholder meals selected for today
@@ -17,6 +18,14 @@ export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>Pantry Pal</Text>
+
+      <Button
+        mode="outlined"
+        style={{ marginTop: 20 }}
+        onPress={() => router.push('/account')}
+      >
+        Account
+      </Button>
 
       <Text variant="titleMedium" style={styles.sectionTitle}>
         Meals Planned for Today
