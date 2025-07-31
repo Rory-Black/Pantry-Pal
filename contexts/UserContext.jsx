@@ -1,4 +1,5 @@
 import {createContext, useEffect, useState} from 'react'
+import { router } from 'expo-router';
 import { account } from '../lib/appwrite';
 import { ID } from 'react-native-appwrite';
 
@@ -51,8 +52,9 @@ export function UserProvider({ children }){
     try {
       await account.deleteSession('current');
       setUser(null);
+      router.push('/login'); // Use push to jump back to login flow
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   }
 
