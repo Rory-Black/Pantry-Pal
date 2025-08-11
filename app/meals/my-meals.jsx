@@ -1,25 +1,25 @@
-import { ScrollView, StyleSheet } from 'react-native';
+import { FlatList, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 import { sharedStyles } from '../../styles/sharedStyles';
 import { router } from 'expo-router';
-
-const meals = [
-  { name: 'Spaghetti Bolognese' },
-  { name: 'Avocado Toast' },
-  { name: 'Chicken Stir Fry' },
-];
+import { useMeals } from '../../hooks/useMeals';
 
 export default function MyMeals() {
+  const {meals} = useMeals()
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {meals.map((meal, index) => (
-        <Card
-          style={styles.mealCard}
-          onPress={() => router.push('/meals/(hidden)/meal-info')}
-        >
-          <Card.Title title={meal.name} />
-        </Card>
-      ))}
+      <FlatList
+        data={meals}
+        keyExtractor={(item) => item.$id}
+        contentContainerStyle={styles.list}
+        renderItem={({item}) => (
+          <Pressable onPress={() => router.push(`/meals/(hidden)/meal-info?id=${item.$id}`)}>
+            <Card style={styles.mealCard}>
+              <Card.Title title={item.name} />
+            </Card>
+          </Pressable>
+        )}
+      />
     </ScrollView>
   );
 }

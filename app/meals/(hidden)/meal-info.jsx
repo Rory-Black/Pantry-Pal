@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, Button, Card, Divider, Chip } from 'react-native-paper';
+import { useMeals } from '../../../hooks/useMeals';
+import { useLocalSearchParams } from 'expo-router';
 
 export default function MealInfoScreen() {
+  console.log('MealInfoScreen rendered');
+  const [meal, setMeal] = useState(null)
+  const { id } = useLocalSearchParams();
+  const { fetchMealById } = useMeals()
+
+  // getting the meal
+  useEffect(() => {
+    console.log('useEffect running, id:', id);
+    async function loadMeal() {
+      const mealData = await fetchMealById(id)
+      console.log('Fetched meal:', mealData);
+      setMeal(mealData)
+    }
+    loadMeal()
+  }, [id]);
+
+  if (!meal) {
+    return <Text style={{ textAlign: 'center', marginTop: 20 }}>Loading meal...</Text>;
+  }
+
   // Placeholder data
-  const meal = {
-    title: 'Spaghetti Bolognese [Placeholder]',
+  const placeholderMeal = {
+    name: 'Spaghetti Bolognese [Placeholder]',
     mealType: 'Dinner',
     time: '45 mins',
     difficulty: 'Medium',
@@ -23,12 +45,12 @@ export default function MealInfoScreen() {
     ],
   };
 
-  const missingCount = meal.ingredients.filter(i => !i.has).length;
+  const missingCount = placeholderMeal.ingredients.filter(i => !i.has).length;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text variant="headlineMedium" style={styles.title}>
-        {meal.title}
+        {meal.name}
       </Text>
 
       <Button
@@ -45,13 +67,13 @@ export default function MealInfoScreen() {
         <Card.Title title="Meal Details" />
         <Card.Content style={styles.infoRow}>
           <Chip icon="silverware-fork-knife" style={styles.chip}>
-            {meal.mealType}
+            {placeholderMeal.mealType}
           </Chip>
           <Chip icon="clock-outline" style={styles.chip}>
-            {meal.time}
+            {placeholderMeal.time}
           </Chip>
           <Chip icon="speedometer" style={styles.chip}>
-            {meal.difficulty}
+            {placeholderMeal.difficulty}
           </Chip>
         </Card.Content>
       </Card>
@@ -64,7 +86,7 @@ export default function MealInfoScreen() {
             <Text style={styles.missingText}>{missingCount} missing ingredient(s)</Text>
           </View>
           <Divider style={{ marginBottom: 8 }} />
-          {meal.ingredients.map((item, index) => (
+          {placeholderMeal.ingredients.map((item, index) => (
             <View key={index} style={styles.ingredientRow}>
               <Text style={item.has ? styles.ingredientText : styles.ingredientMissing}>
                 {item.name} — {item.quantity}
@@ -78,7 +100,7 @@ export default function MealInfoScreen() {
       <Card style={styles.card}>
         <Card.Title title="Instructions" />
         <Card.Content>
-          {meal.instructions.map((step, index) => (
+          {placeholderMeal.instructions.map((step, index) => (
             <Text key={index} style={styles.instructionText}>
               {index + 1}. {step}
             </Text>

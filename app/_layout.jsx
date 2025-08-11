@@ -5,6 +5,7 @@ import { useUser } from '../hooks/useUser';
 import { Slot } from 'expo-router';
 import { View } from 'react-native';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { MealsProvider } from '../contexts/MealsContext';
 
 function AppContent() {
   const { user, loading } = useUser();
@@ -35,11 +36,13 @@ function AppContent() {
 export default function Layout() {
   return (
     <UserProvider>
-      <ProtectedRoute>
-        <PaperProvider>
-          <AppContent />
-        </PaperProvider>
-      </ProtectedRoute>
+      <MealsProvider>
+        <ProtectedRoute>
+          <PaperProvider>
+            <AppContent />
+          </PaperProvider>
+        </ProtectedRoute>
+      </MealsProvider>
     </UserProvider>
   );
 }
